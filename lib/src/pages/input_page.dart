@@ -10,6 +10,9 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   String _name ='';
+  String _email ='';
+  String _date = '';
+  TextEditingController _inputFieldDateController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,12 @@ class _InputPageState extends State<InputPage> {
         padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
         children: <Widget>[
           _createInput(),
+          Divider(),
+          _createEmail(),
+          Divider(),
+          _createPassword(),
+          Divider(),
+          _createDate(context),
           Divider(),
           _createPerson()
         ],
@@ -51,7 +60,86 @@ class _InputPageState extends State<InputPage> {
   Widget _createPerson(){
 
     return ListTile(
-      title: Text('Nombre es $_name')
+      title: Text('Nombre es $_name'),
+      subtitle: Text('$_email'),
     );
+  }
+
+  Widget _createEmail() {
+    return TextField(
+      //autofocus: true,
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'Correo electronico',
+        labelText: 'Email',
+        suffixIcon: Icon(Icons.alternate_email),
+        icon: Icon(Icons.email)
+      ),
+      onChanged: (value){
+        setState(() {
+          _email = value;
+        });
+      },
+    );
+  }
+
+  Widget _createPassword() {
+    return TextField(
+      //autofocus: true,
+      obscureText: true,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'pasword',
+        labelText: 'Password',
+        suffixIcon: Icon(Icons.lock_open),
+        icon: Icon(Icons.lock)
+      ),
+      onChanged: (value){
+        setState(() {
+          _email = value;
+        });
+      },
+    );
+  }
+
+  Widget _createDate(BuildContext context) {
+    return TextField(
+      enableInteractiveSelection: false,
+      controller: _inputFieldDateController,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0)
+        ),
+        hintText: 'Fecha nacimiento',
+        labelText: 'Fecha nacimiento',
+        suffixIcon: Icon(Icons.perm_contact_calendar),
+        icon: Icon(Icons.calendar_today)
+      ),
+      onTap: (){
+        FocusScope.of(context).requestFocus(new FocusNode());
+        _selectDate(context);
+      },
+    );
+  }
+  _selectDate(BuildContext context) async {
+    DateTime picked = await showDatePicker(
+      context: context, 
+      initialDate: new DateTime.now(), 
+      firstDate: new DateTime(2018), 
+      lastDate: new DateTime(2025),
+      locale: Locale('es', 'ES')
+    );
+
+    if(picked != null){
+      setState(() {
+        _date = picked.toString();
+        _inputFieldDateController.text = _date;
+      });
+    }
   }
 }
