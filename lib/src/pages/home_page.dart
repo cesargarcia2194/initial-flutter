@@ -17,12 +17,6 @@ class HomePage extends StatelessWidget {
     );
   }
   Widget _list() {
-    //menuProvider.loadData().then((value) {
-    //  print(value);
-    //});
-    //return ListView(
-    //  children: _listItems(),
-    //);
     return FutureBuilder(
       future: menuProvider.loadData(),
       initialData: [],
